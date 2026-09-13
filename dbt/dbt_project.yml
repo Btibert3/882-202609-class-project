@@ -1,0 +1,24 @@
+name: autoelite
+version: "1.0.0"
+config-version: 2
+
+profile: autoelite
+
+model-paths: ["models"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+seed-paths: ["seeds"]
+snapshot-paths: ["snapshots"]
+clean-targets: ["target"]
+
+models:
+  autoelite:
+    staging:
+      +materialized: view
+      +schema: autoelite_staging
+    intermediate:
+      +materialized: view
+      +schema: autoelite_intermediate
+    marts:
+      +materialized: table
+      +schema: autoelite_marts

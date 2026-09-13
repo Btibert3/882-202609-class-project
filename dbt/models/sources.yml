@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: autoelite_raw
+    database: "{{ env_var('GCP_PROJECT') }}"
+    schema: autoelite_raw
+    tables:
+      - name: customers
+      - name: reps
+      - name: products
+      - name: orders
+      - name: order_items
