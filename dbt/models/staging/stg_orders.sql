@@ -9,7 +9,7 @@ renamed as (
         owner_id       as rep_id,
         opportunity_id,
         pricebook_id,
-        status,
+        status         as order_status,
         effective_date as order_date,
         _loaded_at,
         _source
