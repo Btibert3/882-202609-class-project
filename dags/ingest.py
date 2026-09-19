@@ -27,7 +27,7 @@ import pendulum
 import requests
 from airflow.exceptions import AirflowSkipException
 from airflow.sdk import dag, task
-from autoelite.transforms import normalize_rows
+from utils.transforms import normalize_rows
 from google.cloud import storage
 
 
