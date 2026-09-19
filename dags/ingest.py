@@ -92,7 +92,8 @@ def _load(blob_path: str | None, table: str) -> None:
         job_config=bigquery.LoadJobConfig(
             source_format=bigquery.SourceFormat.NEWLINE_DELIMITED_JSON,
             write_disposition=bigquery.WriteDisposition.WRITE_APPEND,
-            autodetect=True,
+            autodetect=False,
+            ignore_unknown_values=True,
         ),
     )
     job.result()

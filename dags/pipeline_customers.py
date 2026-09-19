@@ -95,7 +95,8 @@ def pipeline_customers():
             job_config=bigquery.LoadJobConfig(
                 source_format=bigquery.SourceFormat.NEWLINE_DELIMITED_JSON,
                 write_disposition=bigquery.WriteDisposition.WRITE_APPEND,
-                autodetect=True,
+                autodetect=False,
+                ignore_unknown_values=True,
             ),
         )
         job.result()
