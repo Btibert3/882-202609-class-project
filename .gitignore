@@ -17,13 +17,13 @@ astro
 .venv
 .astro/standalone/
 .astro/worktrees/
+.astro/config.yaml.lock
 airflow-webserver.pid
 webserver_config.py
 airflow.cfg
 airflow.db
 .astro/*.local.yml
 .astro/*.local.yaml
-.astro/
 
 **/.astro/dbt_metadata.json
 **/.astro/manifest.slim.json
