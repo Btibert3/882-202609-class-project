@@ -39,9 +39,9 @@ DATASET = "autoelite_raw"
 
 # ── helpers ───────────────────────────────────────────────────────────────────
 
-def _extract(table: str, data_interval_end) -> str:
+def _extract(table: str, data_interval_start) -> str:
     """Call the API for one table, write NDJSON rows to GCS, return blob path."""
-    run_date = data_interval_end.strftime("%Y-%m-%d")
+    run_date = data_interval_start.strftime("%Y-%m-%d")
 
     resp = requests.get(
         f"{API_BASE}/data/{table}",
@@ -140,8 +140,8 @@ def pipeline_raw():
         """)
 
     @task(retries=3, retry_delay=timedelta(seconds=30))
-    def extract_customers(data_interval_end=None) -> str:
-        return _extract("customers", data_interval_end)
+    def extract_customers(data_interval_start=None) -> str:
+        return _extract("customers", data_interval_start)
 
     @task(retries=3, retry_delay=timedelta(seconds=30))
     def load_customers(blob_path: str) -> None:
@@ -166,8 +166,8 @@ def pipeline_raw():
         """)
 
     @task(retries=3, retry_delay=timedelta(seconds=30))
-    def extract_orders(data_interval_end=None) -> str:
-        return _extract("orders", data_interval_end)
+    def extract_orders(data_interval_start=None) -> str:
+        return _extract("orders", data_interval_start)
 
     @task(retries=3, retry_delay=timedelta(seconds=30))
     def load_orders(blob_path: str) -> None:
@@ -191,8 +191,8 @@ def pipeline_raw():
         """)
 
     @task(retries=3, retry_delay=timedelta(seconds=30))
-    def extract_order_items(data_interval_end=None) -> str:
-        return _extract("order_items", data_interval_end)
+    def extract_order_items(data_interval_start=None) -> str:
+        return _extract("order_items", data_interval_start)
 
     @task(retries=3, retry_delay=timedelta(seconds=30))
     def load_order_items(blob_path: str) -> None:
