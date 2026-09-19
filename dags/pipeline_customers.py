@@ -41,7 +41,7 @@ def pipeline_customers():
     def extract(data_interval_end=None) -> str:
         """Call the API and write the raw rows to GCS. Returns the blob path."""
 
-        run_date = (data_interval_end - timedelta(days=1)).strftime("%Y-%m-%d")
+        run_date = data_interval_end.strftime("%Y-%m-%d")
 
         resp = requests.get(
             f"{API_BASE}/data/{TABLE}",

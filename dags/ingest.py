@@ -40,7 +40,7 @@ DATASET = "autoelite_raw"
 
 def _extract(table: str, data_interval_end) -> str:
     """Call the API for one table, write NDJSON rows to GCS, return blob path."""
-    run_date = (data_interval_end - timedelta(days=1)).strftime("%Y-%m-%d")
+    run_date = data_interval_end.strftime("%Y-%m-%d")
 
     resp = requests.get(
         f"{API_BASE}/data/{table}",
