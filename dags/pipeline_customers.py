@@ -8,8 +8,9 @@ Pattern: API → GCS (raw artifact) → BigQuery
 
 import json
 import os
-from datetime import datetime, timedelta
+from datetime import timedelta
 
+import pendulum
 import requests
 from airflow.sdk import dag, task
 from google.cloud import storage
@@ -25,7 +26,7 @@ TABLE = "customers"
 
 @dag(
     schedule="@daily",
-    start_date=datetime(2026, 9, 1),
+    start_date=pendulum.datetime(2026, 9, 1, tz="UTC"),
     catchup=True,
     max_active_runs=1,
     default_args={
