@@ -53,6 +53,10 @@ def pipeline_customers():
         rows = resp.json().get("rows", [])
         print(f"{TABLE} | {run_date} | {len(rows)} rows")
 
+        if not rows:
+            print("no rows — skipping GCS write")
+            return None
+
         # one row per line so BigQuery can load the file directly
         ndjson = "\n".join(json.dumps(row, default=str) for row in rows)
 
@@ -64,8 +68,12 @@ def pipeline_customers():
         return blob_path
 
     @task
-    def load(blob_path: str) -> None:
+    def load(blob_path: str | None) -> None:
         """Load the GCS file directly into BigQuery. BigQuery reads the file — Python doesn't."""
+        if blob_path is None:
+            print("no file to load — skipping")
+            return
+
         from google.cloud import bigquery
 
         bq  = bigquery.Client(project=GCP_PROJECT)

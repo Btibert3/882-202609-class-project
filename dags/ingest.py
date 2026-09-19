@@ -52,6 +52,10 @@ def _extract(table: str, data_interval_end) -> str:
     rows = resp.json().get("rows", [])
     print(f"{table} | {run_date} | {len(rows)} rows")
 
+    if not rows:
+        print("no rows — skipping GCS write")
+        return None
+
     ndjson = "\n".join(json.dumps(row, default=str) for row in rows)
     blob_path = f"autoelite/raw/{table}/date={run_date}/data.json"
     storage.Client().bucket(GCS_BUCKET).blob(blob_path).upload_from_string(
@@ -61,8 +65,12 @@ def _extract(table: str, data_interval_end) -> str:
     return blob_path
 
 
-def _load(blob_path: str, table: str) -> None:
+def _load(blob_path: str | None, table: str) -> None:
     """Load a GCS file directly into BigQuery. BigQuery reads the file — Python doesn't."""
+    if blob_path is None:
+        print("no file to load — skipping")
+        return
+
     from google.cloud import bigquery
 
     bq  = bigquery.Client(project=GCP_PROJECT)
