@@ -8,6 +8,7 @@ Pattern: API → GCS (raw artifact) → BigQuery
 
 import json
 import os
+import re
 from datetime import timedelta
 
 import pendulum
@@ -56,6 +57,11 @@ def pipeline_customers():
         if not rows:
             print("no rows — skipping GCS write")
             return None
+
+        def to_snake(key):
+            return re.sub(r"(?<!^)(?=[A-Z])", "_", key).lower()
+
+        rows = [{to_snake(k): v for k, v in row.items()} for row in rows]
 
         # one row per line so BigQuery can load the file directly
         ndjson = "\n".join(json.dumps(row, default=str) for row in rows)

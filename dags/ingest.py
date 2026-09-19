@@ -21,6 +21,7 @@ as dbt seeds in a later session.
 
 import json
 import os
+import re
 from datetime import timedelta
 
 import pendulum
@@ -55,6 +56,11 @@ def _extract(table: str, data_interval_end) -> str:
     if not rows:
         print("no rows — skipping GCS write")
         return None
+
+    def to_snake(key):
+        return re.sub(r"(?<!^)(?=[A-Z])", "_", key).lower()
+
+    rows = [{to_snake(k): v for k, v in row.items()} for row in rows]
 
     ndjson = "\n".join(json.dumps(row, default=str) for row in rows)
     blob_path = f"autoelite/raw/{table}/date={run_date}/data.json"
