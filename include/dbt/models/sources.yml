@@ -10,4 +10,5 @@ sources:
       - name: products
       - name: orders
       - name: order_items
+      - name: deals   # populated by pipeline_deals — built in the Session 3 exercise
 

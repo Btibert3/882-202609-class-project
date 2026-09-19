@@ -1,0 +1,9 @@
+# Local development settings for astro dev.
+# This file is NOT used on Astronomer cloud — set variables there via the UI.
+#
+# Environment variables (API keys, GCP config) live in .env — see .env.example.
+
+airflow:
+  connections: []
+  pools: []
+  variables: []
