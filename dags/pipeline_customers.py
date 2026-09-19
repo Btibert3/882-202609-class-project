@@ -8,13 +8,13 @@ Pattern: API → GCS (raw artifact) → BigQuery
 
 import json
 import os
-import re
 from datetime import timedelta
 
 import pendulum
 import requests
 from airflow.exceptions import AirflowSkipException
 from airflow.sdk import dag, task
+from utils.transforms import normalize_rows
 from google.cloud import storage
 
 
@@ -61,10 +61,7 @@ def pipeline_customers():
             print("no rows — skipping GCS write")
             return None
 
-        def to_snake(key):
-            return re.sub(r"(?<!^)(?=[A-Z])", "_", key).lower()
-
-        rows = [{to_snake(k): v for k, v in row.items()} for row in rows]
+        rows = normalize_rows(rows)
 
         # one row per line so BigQuery can load the file directly
         ndjson = "\n".join(json.dumps(row, default=str) for row in rows)
