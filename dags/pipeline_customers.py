@@ -74,7 +74,13 @@ def pipeline_customers():
             print("no file to load — skipping")
             return
 
-        from google.cloud import bigquery
+        from google.cloud import bigquery, storage as gcs
+
+        blob = gcs.Client().bucket(GCS_BUCKET).blob(blob_path)
+        blob.reload()
+        if blob.size == 0:
+            print("empty file — skipping load")
+            return
 
         bq  = bigquery.Client(project=GCP_PROJECT)
         job = bq.load_table_from_uri(
