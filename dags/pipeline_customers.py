@@ -13,6 +13,7 @@ from datetime import timedelta
 
 import pendulum
 import requests
+from airflow.exceptions import AirflowSkipException
 from airflow.sdk import dag, task
 from google.cloud import storage
 
@@ -27,7 +28,7 @@ TABLE = "customers"
 
 @dag(
     schedule="@daily",
-    start_date=pendulum.datetime(2026, 9, 1, tz="UTC"),
+    start_date=pendulum.datetime(2026, 8, 31, tz="UTC"),
     catchup=True,
     max_active_runs=1,
     default_args={
@@ -49,6 +50,8 @@ def pipeline_customers():
             params={"date": run_date, "api_key": API_KEY},
             timeout=30,
         )
+        if resp.status_code in (400, 403):
+            raise AirflowSkipException(f"API returned {resp.status_code} for {run_date}: {resp.text}")
         resp.raise_for_status()
 
         rows = resp.json().get("rows", [])
