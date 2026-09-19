@@ -27,3 +27,4 @@ airflow.db
 
 **/.astro/dbt_metadata.json
 **/.astro/manifest.slim.json
+include/dbt/.user.yml
