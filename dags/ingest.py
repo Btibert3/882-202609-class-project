@@ -199,6 +199,23 @@ def pipeline_raw():
     def load_order_items(blob_path: str) -> None:
         _load(blob_path, "order_items")
 
+    # ── deals ─────────────────────────────────────────────────────────────────
+
+    @task
+    def create_deals():
+        # TODO: create the deals table in BigQuery if it does not exist
+        pass
+
+    @task(retries=3, retry_delay=timedelta(seconds=30))
+    def extract_deals(data_interval_end=None) -> str:
+        # TODO: extract deals from the API and write to GCS
+        pass
+
+    @task(retries=3, retry_delay=timedelta(seconds=30))
+    def load_deals(blob_path: str) -> None:
+        # TODO: load the GCS file into BigQuery
+        pass
+
     # customers
     sc  = create_customers()
     ec  = extract_customers()
@@ -216,6 +233,12 @@ def pipeline_raw():
     eoi = extract_order_items()
     loi = load_order_items(eoi)
     soi >> eoi >> loi
+
+    # deals
+    sd  = create_deals()
+    ed  = extract_deals()
+    ld  = load_deals(ed)
+    sd >> ed >> ld
 
 
 pipeline_raw()

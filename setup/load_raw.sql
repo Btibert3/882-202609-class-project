@@ -1,5 +1,5 @@
 -- Load AutoElite flat files from GCS into BigQuery raw schema.
--- Run once at the start of class 2.
+-- Run once at the start of class (re-run safe -- uses CREATE OR REPLACE).
 --
 -- NOTE:  you must have your project set in the shell/terminal or set programmatically
 --
@@ -169,5 +169,46 @@ LOAD DATA INTO autoelite_raw.order_items (
 FROM FILES (
   format            = 'CSV',
   uris              = ['gs://qst-public/ba882/202609/autoelite/order_items.csv'],
+  skip_leading_rows = 1
+);
+
+-- -------------------------------------------------------------------------
+-- deals
+-- -------------------------------------------------------------------------
+
+CREATE OR REPLACE TABLE autoelite_raw.deals (
+  id           STRING,
+  contract_id  STRING,
+  account_id   STRING,
+  contact_id   STRING,
+  owner_id     STRING,
+  probability  FLOAT64,
+  amount       FLOAT64,
+  stage_name   STRING,
+  name         STRING,
+  description  STRING,
+  created_date TIMESTAMP,
+  close_date   DATE,
+  _loaded_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+  _source      STRING    DEFAULT 'flat-file'
+);
+
+LOAD DATA INTO autoelite_raw.deals (
+  id           STRING,
+  contract_id  STRING,
+  account_id   STRING,
+  contact_id   STRING,
+  owner_id     STRING,
+  probability  FLOAT64,
+  amount       FLOAT64,
+  stage_name   STRING,
+  name         STRING,
+  description  STRING,
+  created_date TIMESTAMP,
+  close_date   DATE
+)
+FROM FILES (
+  format            = 'CSV',
+  uris              = ['gs://qst-public/ba882/202609/autoelite/deals.csv'],
   skip_leading_rows = 1
 );
