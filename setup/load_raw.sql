@@ -187,7 +187,7 @@ CREATE OR REPLACE TABLE autoelite_raw.deals (
   stage_name   STRING,
   name         STRING,
   description  STRING,
-  created_date TIMESTAMP,
+  created_date STRING,
   close_date   DATE,
   _loaded_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
   _source      STRING    DEFAULT 'flat-file'
@@ -204,7 +204,7 @@ LOAD DATA INTO autoelite_raw.deals (
   stage_name   STRING,
   name         STRING,
   description  STRING,
-  created_date TIMESTAMP,
+  created_date STRING,
   close_date   DATE
 )
 FROM FILES (

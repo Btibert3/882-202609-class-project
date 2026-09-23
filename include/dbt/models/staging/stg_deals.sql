@@ -12,7 +12,7 @@ renamed as (
         stage_name,
         amount,
         probability,
-        created_date,
+        PARSE_TIMESTAMP('%Y-%m-%dT%H:%M:%S%Ez', created_date) as created_date,
         close_date,
         _loaded_at,
         _source
