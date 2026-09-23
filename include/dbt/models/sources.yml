@@ -10,3 +10,4 @@ sources:
       - name: products
       - name: orders
       - name: order_items
+      - name: deals

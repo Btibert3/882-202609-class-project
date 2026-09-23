@@ -203,18 +203,32 @@ def pipeline_raw():
 
     @task
     def create_deals():
-        # TODO: create the deals table in BigQuery if it does not exist
-        pass
+        _create(f"""
+            CREATE TABLE IF NOT EXISTS `{GCP_PROJECT}.{DATASET}.deals` (
+                id           STRING,
+                contract_id  STRING,
+                account_id   STRING,
+                contact_id   STRING,
+                owner_id     STRING,
+                probability  FLOAT64,
+                amount       FLOAT64,
+                stage_name   STRING,
+                name         STRING,
+                description  STRING,
+                created_date TIMESTAMP,
+                close_date   DATE,
+                _loaded_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+                _source      STRING    DEFAULT 'api'
+            )
+        """)
 
     @task(retries=3, retry_delay=timedelta(seconds=30))
     def extract_deals(data_interval_end=None) -> str:
-        # TODO: extract deals from the API and write to GCS
-        pass
+        return _extract("deals", data_interval_end)
 
     @task(retries=3, retry_delay=timedelta(seconds=30))
     def load_deals(blob_path: str) -> None:
-        # TODO: load the GCS file into BigQuery
-        pass
+        _load(blob_path, "deals")
 
     # customers
     sc  = create_customers()
