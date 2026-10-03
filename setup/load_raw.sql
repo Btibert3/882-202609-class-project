@@ -212,3 +212,155 @@ FROM FILES (
   uris              = ['gs://qst-public/ba882/202609/autoelite/deals.csv'],
   skip_leading_rows = 1
 );
+
+-- -------------------------------------------------------------------------
+-- quotes
+-- -------------------------------------------------------------------------
+
+CREATE OR REPLACE TABLE autoelite_raw.quotes (
+  id              STRING,
+  opportunity_id  STRING,
+  account_id      STRING,
+  contact_id      STRING,
+  name            STRING,
+  description     STRING,
+  status          STRING,
+  created_date    STRING,
+  expiration_date DATE,
+  _loaded_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+  _source         STRING    DEFAULT 'flat-file'
+);
+
+LOAD DATA INTO autoelite_raw.quotes (
+  id              STRING,
+  opportunity_id  STRING,
+  account_id      STRING,
+  contact_id      STRING,
+  name            STRING,
+  description     STRING,
+  status          STRING,
+  created_date    STRING,
+  expiration_date DATE
+)
+FROM FILES (
+  format            = 'CSV',
+  uris              = ['gs://qst-public/ba882/202609/autoelite/quotes.csv'],
+  skip_leading_rows = 1
+);
+
+-- -------------------------------------------------------------------------
+-- quote_items
+-- -------------------------------------------------------------------------
+
+CREATE OR REPLACE TABLE autoelite_raw.quote_items (
+  id                       STRING,
+  quote_id                 STRING,
+  opportunity_line_item_id STRING,
+  product2_id              STRING,
+  pricebook_entry_id       STRING,
+  quantity                 FLOAT64,
+  unit_price               FLOAT64,
+  discount                 FLOAT64,
+  total_price              FLOAT64,
+  _loaded_at               TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+  _source                  STRING    DEFAULT 'flat-file'
+);
+
+LOAD DATA INTO autoelite_raw.quote_items (
+  id                       STRING,
+  quote_id                 STRING,
+  opportunity_line_item_id STRING,
+  product2_id              STRING,
+  pricebook_entry_id       STRING,
+  quantity                 FLOAT64,
+  unit_price               FLOAT64,
+  discount                 FLOAT64,
+  total_price              FLOAT64
+)
+FROM FILES (
+  format            = 'CSV',
+  uris              = ['gs://qst-public/ba882/202609/autoelite/quote_items.csv'],
+  skip_leading_rows = 1
+);
+
+-- -------------------------------------------------------------------------
+-- prospects
+-- -------------------------------------------------------------------------
+
+CREATE OR REPLACE TABLE autoelite_raw.prospects (
+  id                    STRING,
+  first_name            STRING,
+  last_name             STRING,
+  email                 STRING,
+  phone                 STRING,
+  status                STRING,
+  converted_contact_id  STRING,
+  converted_account_id  STRING,
+  created_date          STRING,
+  converted_date        DATE,
+  is_converted          BOOL,
+  owner_id              STRING,
+  _loaded_at            TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+  _source               STRING    DEFAULT 'flat-file'
+);
+
+LOAD DATA INTO autoelite_raw.prospects (
+  id                    STRING,
+  first_name            STRING,
+  last_name             STRING,
+  email                 STRING,
+  phone                 STRING,
+  status                STRING,
+  converted_contact_id  STRING,
+  converted_account_id  STRING,
+  created_date          STRING,
+  converted_date        DATE,
+  is_converted          BOOL,
+  owner_id              STRING
+)
+FROM FILES (
+  format            = 'CSV',
+  uris              = ['gs://qst-public/ba882/202609/autoelite/prospects.csv'],
+  skip_leading_rows = 1
+);
+
+-- -------------------------------------------------------------------------
+-- tickets
+-- -------------------------------------------------------------------------
+
+CREATE OR REPLACE TABLE autoelite_raw.tickets (
+  id               STRING,
+  priority         STRING,
+  subject          STRING,
+  description      STRING,
+  status           STRING,
+  contact_id       STRING,
+  created_date     STRING,
+  closed_date      STRING,
+  order_item_id__c STRING,
+  issue_id__c      STRING,
+  account_id       STRING,
+  owner_id         STRING,
+  _loaded_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+  _source          STRING    DEFAULT 'flat-file'
+);
+
+LOAD DATA INTO autoelite_raw.tickets (
+  id               STRING,
+  priority         STRING,
+  subject          STRING,
+  description      STRING,
+  status           STRING,
+  contact_id       STRING,
+  created_date     STRING,
+  closed_date      STRING,
+  order_item_id__c STRING,
+  issue_id__c      STRING,
+  account_id       STRING,
+  owner_id         STRING
+)
+FROM FILES (
+  format            = 'CSV',
+  uris              = ['gs://qst-public/ba882/202609/autoelite/tickets.csv'],
+  skip_leading_rows = 1
+);
