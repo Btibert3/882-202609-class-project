@@ -27,14 +27,14 @@ cd 882-202609-class-project
 
 ### 2. Add your service account key
 
-Place your GCP service account JSON key in your **home directory** and name it `sa-key.json`.
-It lives at `~/sa-key.json` — not inside the repo.
+Place your GCP service account JSON key at the **project root** and name it `sa-key.json`.
+It is gitignored — it will never be committed.
 
 > The lab pages and resources discuss this pattern directly.
 
 ```bash
 # confirm it's there
-ls ~/sa-key.json
+ls sa-key.json
 ```
 
 ### 3. Configure your environment variables
@@ -45,7 +45,7 @@ The lab pages discuss how to set an environment variable.  You do not need to wr
 
 ```bash
 export GCP_PROJECT=your-gcp-project-id
-export GOOGLE_APPLICATION_CREDENTIALS=$HOME/sa-key.json
+export GOOGLE_APPLICATION_CREDENTIALS=$HOME/882-202609-class-project/sa-key.json
 ```
 After editing `.bashrc`, reload it via the command below, or as I do, just close/delete the terminal and start with a fresh terminal session.
 
