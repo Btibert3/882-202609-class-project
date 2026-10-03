@@ -1,0 +1,5 @@
+streamlit
+google-cloud-bigquery
+google-cloud-bigquery[pandas]
+pandas
+db-dtypes
