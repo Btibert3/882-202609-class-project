@@ -114,7 +114,7 @@ dbt reads `GCP_PROJECT` from your shell environment (set in `.bashrc` above).
 
 ### 1. Wake your deployment
 
-In the Astronomer UI, wake the deployment before deploying — it hibernates by default.
+In the Astronomer UI, find your deployment and click **Wake**. Wait until the status shows **Running** before proceeding — this can take a few minutes, so be patient.
 
 ### 2. Authenticate
 
@@ -132,7 +132,11 @@ From the project root:
 astro deploy
 ```
 
-This deploys the full image — DAGs, `include/`, and `requirements.txt`.
+You will be presented with a list of deployments, which may only be a single entry.  Type the number of the entry.
+
+Please be patient.
+
+This deploys the full image — DAGs, `include/`, and `requirements.txt`. The deploy itself takes a few minutes to complete — the CLI will show progress and confirm when it's done.
 
 ### 4. Set environment variables in the Astronomer UI
 
