@@ -1,20 +1,18 @@
+-- reps is static reference data — loaded via dbt seed, not the API pipeline
 with source as (
-    select * from {{ source('autoelite_raw', 'reps') }}
+    select * from {{ ref('reps') }}
 ),
 
 renamed as (
     select
-        id         as rep_id,
-        first_name,
-        last_name,
-        email,
-        phone,
-        username,
-        alias,
-        _loaded_at,
-        _source
+        Id       as rep_id,
+        FirstName as first_name,
+        LastName  as last_name,
+        Email     as email,
+        Phone     as phone,
+        Username  as username,
+        Alias     as alias
     from source
-    qualify row_number() over (partition by id order by _loaded_at desc) = 1
 )
 
 select * from renamed

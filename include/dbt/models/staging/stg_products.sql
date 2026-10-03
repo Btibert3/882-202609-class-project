@@ -1,18 +1,16 @@
+-- products is static reference data — loaded via dbt seed, not the API pipeline
 with source as (
-    select * from {{ source('autoelite_raw', 'products') }}
+    select * from {{ ref('products') }}
 ),
 
 renamed as (
     select
-        id          as product_id,
-        name        as product_name,
-        description as product_description,
-        is_active,
-        external_id,
-        _loaded_at,
-        _source
+        Id              as product_id,
+        Name            as product_name,
+        Description     as product_description,
+        IsActive        as is_active,
+        External_ID__c  as external_id
     from source
-    qualify row_number() over (partition by id order by _loaded_at desc) = 1
 )
 
 select * from renamed
