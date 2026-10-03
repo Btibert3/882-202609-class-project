@@ -27,14 +27,14 @@ cd 882-202609-class-project
 
 ### 2. Add your service account key
 
-Place your GCP service account JSON key at the project root and name it `sa-key.json`.
-It is gitignored — it will never be committed.
+Place your GCP service account JSON key in your **home directory** and name it `sa-key.json`.
+It lives at `~/sa-key.json` — not inside the repo.
 
 > The lab pages and resources discuss this pattern directly.
 
 ```bash
 # confirm it's there
-ls sa-key.json
+ls ~/sa-key.json
 ```
 
 ### 3. Configure your environment variables
@@ -45,10 +45,8 @@ The lab pages discuss how to set an environment variable.  You do not need to wr
 
 ```bash
 export GCP_PROJECT=your-gcp-project-id
-export GOOGLE_APPLICATION_CREDENTIALS=/home/your-username/882-202609-class-project/sa-key.json
+export GOOGLE_APPLICATION_CREDENTIALS=$HOME/sa-key.json
 ```
-
-Replace `your-username` with your Cloud Shell username (`echo $HOME` to confirm the path).
 After editing `.bashrc`, reload it via the command below, or as I do, just close/delete the terminal and start with a fresh terminal session.
 
 ```bash
@@ -88,6 +86,10 @@ astro dev start
 ```
 
 Airflow UI at http://localhost:8080 (admin / admin).
+
+### 6b.
+
+The `pipeline_*` dags are what we use to extact and load the data.  I recommend toggling on one at a time.  Once a dag is __active__, because we set the schedule and the parameter `catchup`, Airflow's scheduler will review what hasn't been completed and backfill the data for us.
 
 ### 7. Run dbt
 
