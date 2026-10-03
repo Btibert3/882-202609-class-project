@@ -6,8 +6,10 @@ sources:
     schema: autoelite_raw
     tables:
       - name: customers
-      - name: reps
-      - name: products
+      - name: deals
       - name: orders
       - name: order_items
-      - name: deals
+      - name: quotes
+      - name: quote_items
+      - name: prospects
+      - name: tickets
