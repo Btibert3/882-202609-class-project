@@ -95,10 +95,13 @@ The `pipeline_*` dags are what we use to extact and load the data.  I recommend 
 
 ```bash
 cd include/dbt
+dbt seed
 dbt run
 dbt test
 dbt docs generate && dbt docs serve
 ```
+
+`dbt seed` loads the static reference tables (`reps`, `products`) into BigQuery. Run it before `dbt run` — the staging models for those tables depend on it.
 
 dbt reads `GCP_PROJECT` from your shell environment (set in `.bashrc` above).
 
