@@ -1,0 +1,18 @@
+version: 2
+
+exposures:
+
+  - name: revenue_dashboard
+    type: dashboard
+    maturity: medium
+    description: >
+      Sales revenue dashboard showing order totals by rep, product, and customer.
+      Powered by fct_order_items joined to the dimension tables.
+    depends_on:
+      - ref('fct_order_items')
+      - ref('dim_reps')
+      - ref('dim_products')
+      - ref('dim_customers')
+    owner:
+      name: AutoElite Analytics
+      email: analytics@autoelite.com
