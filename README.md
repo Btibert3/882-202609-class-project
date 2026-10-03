@@ -65,7 +65,15 @@ cp .env.example .env
 
 The values you need are available on the course site. `GCP_PROJECT` and `GOOGLE_APPLICATION_CREDENTIALS` are already set in your `.bashrc` above — they still need to be in `.env` for Airflow's Docker container to pick them up.
 
-### 5. Start Airflow
+### 5. Load historical flat files into BigQuery
+
+This loads the pre-9/1 historical data into `autoelite_raw`. Run once — it is safe to re-run.
+
+```bash
+bq query --use_legacy_sql=false < setup/load_raw.sql
+```
+
+### 6. Start Airflow
 
 ```bash
 astro dev start
@@ -73,7 +81,7 @@ astro dev start
 
 Airflow UI at http://localhost:8080 (admin / admin).
 
-### 6. Run dbt
+### 7. Run dbt
 
 ```bash
 cd include/dbt
