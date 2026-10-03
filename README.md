@@ -69,6 +69,14 @@ The values you need are available on the course site. `GCP_PROJECT` and `GOOGLE_
 
 This loads the pre-9/1 historical data into `autoelite_raw`. Run once — it is safe to re-run.
 
+First, make sure your `gcloud` project is set (use the variable you added to `.bashrc`):
+
+```bash
+gcloud config set project $GCP_PROJECT
+```
+
+Then run the setup SQL:
+
 ```bash
 bq query --use_legacy_sql=false < setup/load_raw.sql
 ```
