@@ -1,7 +1,7 @@
 """
-## AutoElite: Customers Pipeline
+## AutoElite: Quotes Pipeline
 
-Pulls customer records from the AutoElite API and loads them into BigQuery.
+Pulls quote records from the AutoElite API and loads them into BigQuery.
 
 Pattern: API → GCS (raw artifact) → BigQuery
 """
@@ -23,7 +23,7 @@ API_KEY     = os.environ.get("AUTOELITE_API_KEY", "")
 GCS_BUCKET  = os.environ.get("GCS_BUCKET", "")
 GCP_PROJECT = os.environ.get("GCP_PROJECT", "")
 
-TABLE = "customers"
+TABLE = "quotes"
 
 
 @dag(
@@ -35,9 +35,9 @@ TABLE = "customers"
         "retries": 3,
         "retry_delay": timedelta(seconds=30),
     },
-    tags=["raw", "customers"],
+    tags=["raw", "quotes"],
 )
-def pipeline_customers():
+def pipeline_quotes():
 
     @task(retries=3)
     def extract(data_interval_end=None) -> str:
@@ -63,7 +63,6 @@ def pipeline_customers():
 
         rows = normalize_rows(rows)
 
-        # one row per line so BigQuery can load the file directly
         ndjson = "\n".join(json.dumps(row, default=str) for row in rows)
 
         blob_path = f"autoelite/raw/{TABLE}/date={run_date}/data.json"
@@ -75,7 +74,7 @@ def pipeline_customers():
 
     @task
     def load(blob_path: str | None) -> None:
-        """Load the GCS file directly into BigQuery. BigQuery reads the file — Python doesn't."""
+        """Load the GCS file into BigQuery. BigQuery reads the file — Python doesn't."""
         if blob_path is None:
             print("no file to load — skipping")
             return
@@ -105,4 +104,4 @@ def pipeline_customers():
     load(extract())
 
 
-pipeline_customers()
+pipeline_quotes()
