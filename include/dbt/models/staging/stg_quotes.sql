@@ -11,7 +11,7 @@ renamed as (
         name                as quote_name,
         description,
         status              as quote_status,
-        PARSE_TIMESTAMP('%Y-%m-%dT%H:%M:%S%Ez', created_date) as created_date,
+        PARSE_TIMESTAMP('%Y-%m-%dT%H:%M:%E3S%Ez', created_date) as created_date,
         expiration_date,
         _loaded_at,
         _source

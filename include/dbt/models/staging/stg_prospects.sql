@@ -14,7 +14,7 @@ renamed as (
         converted_contact_id,
         converted_account_id    as converted_customer_id,
         is_converted,
-        PARSE_TIMESTAMP('%Y-%m-%dT%H:%M:%S%Ez', created_date) as created_date,
+        PARSE_TIMESTAMP('%Y-%m-%dT%H:%M:%E3S%Ez', created_date) as created_date,
         converted_date,
         _loaded_at,
         _source
