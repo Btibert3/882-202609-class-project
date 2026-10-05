@@ -1,0 +1,12 @@
+functions-framework==3.*
+requests
+
+# you could add others
+# pandas 
+# duckdb 
+# ....
+
+# NOTE:
+# Remember, your service account allows you to gcloud SDK/APIs 
+# you dont always need to fall back to pandas 
+# consider workign WITH an LLM to design what you need, don't simply ask for a solution
