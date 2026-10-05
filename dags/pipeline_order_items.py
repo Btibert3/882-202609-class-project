@@ -27,8 +27,8 @@ TABLE = "order_items"
 
 
 @dag(
-    schedule="@daily",
-    start_date=pendulum.datetime(2026, 8, 31, tz="UTC"),
+    schedule="36 9 * * *",
+    start_date=pendulum.datetime(2026, 8, 31, tz="America/New_York"),
     catchup=True,
     max_active_runs=1,
     default_args={
