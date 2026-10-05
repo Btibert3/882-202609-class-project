@@ -10,6 +10,7 @@ REGION="us-central1"
 # you can get your service account from IAM on your project
 SA="{fill in}@${PROJECT}.iam.gserviceaccount.com"
 STAGE_BUCKET="${PROJECT}-functions"
+GCS_BUCKET="your-bucket-here"    # we created this earlier in the semester
 
 gcloud config set project $PROJECT
 
