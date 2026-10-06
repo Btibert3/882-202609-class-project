@@ -4,6 +4,8 @@ This repo is the reference implementation for the class. Use it to follow along 
 
 > Pull updates as the semester progresses. Do not edit files here — use this as a guide for building your own team repo.
 
+> Consider using this repo as a read-only view, or create your own branch and always pull main, where I update code for you to review for your own team build outs.
+
 ---
 
 ## Stack
