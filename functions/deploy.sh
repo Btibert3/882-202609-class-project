@@ -8,9 +8,9 @@ REGION="us-central1"
 # example:
 # SA="{your-alias-here}-ba882-fall26@${PROJECT}.iam.gserviceaccount.com"
 # you can get your service account from IAM on your project
-SA="{fill in}@${PROJECT}.iam.gserviceaccount.com"
+SA="in-class-project@btibert-ba882-fall26.iam.gserviceaccount.com"
 STAGE_BUCKET="${PROJECT}-functions"
-GCS_BUCKET="your-bucket-here"    # we created this earlier in the semester
+GCS_BUCKET="qst-btibert-882-202609-inclass-proj"    # we created this earlier in the semester
 
 gcloud config set project $PROJECT
 
