@@ -364,3 +364,34 @@ FROM FILES (
   uris              = ['gs://qst-public/ba882/202609/autoelite/tickets.csv'],
   skip_leading_rows = 1
 );
+
+
+-- activities (Task table from CRM — rep interactions logged against deals)
+CREATE OR REPLACE TABLE autoelite_raw.activities (
+  id            STRING,
+  what_id       STRING,
+  owner_id      STRING,
+  priority      STRING,
+  status        STRING,
+  activity_date STRING,
+  subject       STRING,
+  description   STRING,
+  _loaded_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+  _source       STRING    DEFAULT 'flat-file'
+);
+
+LOAD DATA INTO autoelite_raw.activities (
+  id            STRING,
+  what_id       STRING,
+  owner_id      STRING,
+  priority      STRING,
+  status        STRING,
+  activity_date STRING,
+  subject       STRING,
+  description   STRING
+)
+FROM FILES (
+  format            = 'CSV',
+  uris              = ['gs://qst-public/ba882/202609/autoelite/activities.csv'],
+  skip_leading_rows = 1
+);

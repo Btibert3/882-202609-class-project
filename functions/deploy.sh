@@ -38,4 +38,23 @@ gcloud functions deploy weather-extract \
     --timeout 60s \
     --set-env-vars GCS_BUCKET=$GCS_BUCKET
 
+echo "======================================================"
+echo "deploying activities-extract"
+echo "======================================================"
+
+# TODO: replace YOUR_API_KEY with your actual key
+gcloud functions deploy activities-extract \
+    --gen2 \
+    --runtime python312 \
+    --trigger-http \
+    --entry-point task \
+    --source ./functions/activities-extract \
+    --stage-bucket $STAGE_BUCKET \
+    --service-account $SA \
+    --region $REGION \
+    --allow-unauthenticated \
+    --memory 256MB \
+    --timeout 120s \
+    --set-env-vars API_KEY=YOUR_API_KEY
+
 echo "done"

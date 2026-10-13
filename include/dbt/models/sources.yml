@@ -13,3 +13,4 @@ sources:
       - name: quote_items
       - name: prospects
       - name: tickets
+      - name: activities
