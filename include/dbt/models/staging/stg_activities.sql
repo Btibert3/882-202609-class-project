@@ -4,9 +4,14 @@ with source as (
 
 renamed as (
     select
-        -- TODO: inspect the raw table and rename columns
-        -- hint: what_id is the deal FK -- what should it be called?
-        -- follow the same patterns as stg_deals.sql
+        id            as activity_id,
+        what_id       as deal_id,
+        owner_id      as rep_id,
+        priority,
+        status,
+        activity_date,
+        subject,
+        description,
         _loaded_at,
         _source
     from source
