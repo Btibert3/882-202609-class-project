@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: stg_activities
+    columns:
+      - name: activity_id
+        tests:
+          - unique
+          - not_null
+      - name: deal_id
+        tests:
+          - not_null
+      - name: rep_id
+        tests:
+          - not_null
