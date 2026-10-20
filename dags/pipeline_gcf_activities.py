@@ -14,8 +14,7 @@ import requests
 from airflow.sdk import dag, task
 from google.cloud import storage
 
-# TODO: paste your deployed function URL here
-GCF_URL    = ""
+GCF_URL    = "https://us-central1-btibert-ba882-fall26.cloudfunctions.net/activities-extract"
 GCS_BUCKET = os.environ.get("GCS_BUCKET", "")
 
 
@@ -29,7 +28,7 @@ GCS_BUCKET = os.environ.get("GCS_BUCKET", "")
 )
 def pipeline_gcf_activities():
 
-    @task()  # TODO: add retries=3 directly to this decorator (task-level override)
+    @task(retries=3)
     def extract(ds=None) -> dict:
         resp = requests.post(GCF_URL, json={"date": ds}, timeout=90)
         resp.raise_for_status()
@@ -40,8 +39,10 @@ def pipeline_gcf_activities():
         date    = payload["date"]
         records = payload["records"]
         blob    = f"activities/date={date}/data.json"
-        # TODO: write records to GCS at the path above
-        #       look at pipeline_gcf_weather.py for the pattern
+        storage.Client().bucket(GCS_BUCKET).blob(blob).upload_from_string(
+            json.dumps(records), content_type="application/json"
+        )
+        print(f"loaded {len(records)} records → gs://{GCS_BUCKET}/{blob}")
 
     load(extract())
 
