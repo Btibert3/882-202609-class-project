@@ -7,7 +7,7 @@ import os
 import requests
 import functions_framework
 
-API_BASE = "https://btibert-bu--ba882-autoelite-api-serve.modal.run"
+API_BASE = "https://btibert-bu--autoelite-api-fastapi-app.modal.run"
 API_KEY  = os.environ.get("API_KEY", "")
 
 
@@ -19,7 +19,7 @@ def task(request):
         return {"error": "date is required"}, 400
 
     resp = requests.get(
-        f"{API_BASE}/activities",
+        f"{API_BASE}/data/activities",
         params={"date": date, "api_key": API_KEY},
         timeout=30,
     )
