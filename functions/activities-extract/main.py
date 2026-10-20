@@ -20,7 +20,7 @@ def task(request):
 
     # TODO: the API fails ~12% of the time with a 503 -- how should we handle this?
     resp = requests.get(
-        f"{API_BASE}/activities",
+        f"{API_BASE}/data/activities",
         params={"date": date, "api_key": API_KEY},
         timeout=30,
     )
