@@ -29,7 +29,7 @@ GCS_BUCKET = os.environ.get("GCS_BUCKET", "")
 )
 def pipeline_gcf_activities():
 
-    @task()
+    @task()  # TODO: add retries=3 directly to this decorator (task-level override)
     def extract(ds=None) -> dict:
         resp = requests.post(GCF_URL, json={"date": ds}, timeout=90)
         resp.raise_for_status()
