@@ -12,6 +12,9 @@ SA="in-class-project@btibert-ba882-fall26.iam.gserviceaccount.com"
 STAGE_BUCKET="${PROJECT}-functions"
 GCS_BUCKET="qst-btibert-882-202609-inclass-proj"    # we created this earlier in the semester
 
+AUTOELITE_API_KEY=YOUR_KEY_HERE
+
+
 gcloud config set project $PROJECT
 
 # create the stage bucket if it doesn't exist
@@ -55,6 +58,6 @@ gcloud functions deploy activities-extract \
     --allow-unauthenticated \
     --memory 256MB \
     --timeout 120s \
-    --set-env-vars API_KEY=YOUR_API_KEY
+    --set-env-vars API_KEY=$AUTOELITE_API_KEY
 
 echo "done"
