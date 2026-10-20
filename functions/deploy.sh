@@ -14,6 +14,9 @@ GCS_BUCKET="qst-btibert-882-202609-inclass-proj"
 
 AUTOELITE_API_KEY=6e680c2fb51808cbbbff5013174aa6ab  # we created this earlier in the semester
 
+AUTOELITE_API_KEY=YOUR_KEY_HERE
+
+
 gcloud config set project $PROJECT
 
 # create the stage bucket if it doesn't exist
