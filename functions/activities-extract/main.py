@@ -7,7 +7,7 @@ import os
 import requests
 import functions_framework
 
-API_BASE = "https://btibert-bu--ba882-autoelite-api-serve.modal.run"
+API_BASE = "https://btibert-bu--autoelite-api-fastapi-app.modal.run"
 API_KEY  = os.environ.get("API_KEY", "")
 
 
