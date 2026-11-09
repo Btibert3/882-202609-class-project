@@ -60,4 +60,22 @@ gcloud functions deploy activities-extract \
     --timeout 120s \
     --set-env-vars API_KEY=$AUTOELITE_API_KEY
 
+echo "======================================================"
+echo "deploying ml-train-model"
+echo "======================================================"
+
+gcloud functions deploy ml-train-model \
+    --gen2 \
+    --runtime python312 \
+    --trigger-http \
+    --entry-point task \
+    --source ./functions/ml-train-model \
+    --stage-bucket $STAGE_BUCKET \
+    --service-account $SA \
+    --region $REGION \
+    --allow-unauthenticated \
+    --memory 1GB \
+    --timeout 300s \
+    --set-env-vars GCS_BUCKET=$GCS_BUCKET
+
 echo "done"
