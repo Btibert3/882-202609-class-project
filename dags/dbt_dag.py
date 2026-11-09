@@ -14,7 +14,7 @@ from pathlib import Path
 
 from cosmos import DbtDag, ExecutionConfig, ExecutionMode, ProjectConfig, ProfileConfig
 
-DBT_PROJECT_PATH = Path("/usr/local/airflow/include/dbt")
+DBT_PROJECT_PATH = (Path(__file__).parent / "../include/dbt").absolute()
 
 dbt_autoelite = DbtDag(
     dag_id="dbt_autoelite",
