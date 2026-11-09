@@ -27,7 +27,7 @@ dbt_autoelite = DbtDag(
         profiles_yml_filepath=DBT_PROJECT_PATH / "profiles.yml",
     ),
     execution_config=ExecutionConfig(
-        execution_mode=ExecutionMode.VIRTUALENV,
+        execution_mode=ExecutionMode.LOCAL,
         dbt_executable_path="/usr/local/airflow/dbt_venv/bin/dbt",
     ),
     schedule="0 11 * * *",
