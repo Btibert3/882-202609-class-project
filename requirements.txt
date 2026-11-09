@@ -2,4 +2,5 @@
 apache-airflow-providers-google
 google-cloud-storage
 requests
+astronomer-cosmos
 astro-run-dag  # needed for astro, should be removed when we deploy
