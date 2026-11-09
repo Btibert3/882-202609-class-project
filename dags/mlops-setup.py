@@ -79,14 +79,15 @@ def mlops_setup():
         bq = bigquery.Client(project=GCP_PROJECT)
         bq.query(f"""
             CREATE TABLE IF NOT EXISTS `{GCP_PROJECT}.mlops.training_run` (
-                run_id     STRING,
-                model_id   STRING,
-                dataset_id STRING,
-                params     JSON,
-                metrics    JSON,
-                artifact   STRING,
-                status     STRING,
-                created_at TIMESTAMP
+                run_id         STRING,
+                model_id       STRING,
+                dataset_id     STRING,
+                airflow_run_id STRING,
+                params         JSON,
+                metrics        JSON,
+                artifact       STRING,
+                status         STRING,
+                created_at     TIMESTAMP
             )
         """).result()
         print(f"table ready: {GCP_PROJECT}.mlops.training_run")
