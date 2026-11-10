@@ -53,7 +53,7 @@ def task(request):
     # -------------------------------------------------------------------------
     bq = bigquery.Client(project=gcp_project)
     df = bq.query(f"""
-        SELECT * FROM `{gcp_project}.ai_datasets.deal_features`
+        SELECT * FROM `{gcp_project}.dev_ai_datasets.deal_features`
     """).to_dataframe()
 
     print(f"loaded {len(df)} rows from deal_features")

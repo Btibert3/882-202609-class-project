@@ -80,11 +80,11 @@ def ml_deal_won():
         result = bq.query(f"""
             SELECT
                 COUNT(*)                                             AS row_count,
-                (SELECT COUNT(*) FROM `{GCP_PROJECT}`.ai_datasets.INFORMATION_SCHEMA.COLUMNS
+                (SELECT COUNT(*) FROM `{GCP_PROJECT}`.dev_ai_datasets.INFORMATION_SCHEMA.COLUMNS
                  WHERE table_name = 'deal_features'
                    AND column_name NOT IN ('deal_id', 'customer_id', 'rep_id', 'is_won')
                 ) AS feature_count
-            FROM `{GCP_PROJECT}.ai_datasets.deal_features`
+            FROM `{GCP_PROJECT}.dev_ai_datasets.deal_features`
         """).result()
 
         row = list(result)[0]
@@ -98,7 +98,7 @@ def ml_deal_won():
                 '{dataset_id}',
                 '{MODEL["model_id"]}',
                 '{data_version}',
-                'bigquery://{GCP_PROJECT}/ai_datasets/deal_features',
+                'bigquery://{GCP_PROJECT}/dev_ai_datasets/deal_features',
                 {row.row_count},
                 {row.feature_count},
                 CURRENT_TIMESTAMP()
