@@ -63,6 +63,7 @@ def ml_deal_won():
                 '{MODEL["ticket_number"]}',
                 '{MODEL["owner"]}',
                 CURRENT_TIMESTAMP()
+            FROM (SELECT 1)
             WHERE NOT EXISTS (
                 SELECT 1 FROM `{GCP_PROJECT}.mlops.model`
                 WHERE model_id = '{MODEL["model_id"]}'
