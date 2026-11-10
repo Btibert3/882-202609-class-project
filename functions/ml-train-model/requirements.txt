@@ -1,0 +1,7 @@
+functions-framework==3.*
+google-cloud-bigquery[pandas]
+google-cloud-storage
+scikit-learn
+joblib
+pandas
+numpy

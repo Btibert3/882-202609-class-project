@@ -366,6 +366,36 @@ FROM FILES (
 );
 
 
+-- -------------------------------------------------------------------------
+-- deal_items
+-- -------------------------------------------------------------------------
+
+CREATE OR REPLACE TABLE autoelite_raw.deal_items (
+  Id                 STRING,
+  OpportunityId      STRING,
+  Product2Id         STRING,
+  PricebookEntryId   STRING,
+  Quantity           STRING,
+  TotalPrice         STRING,
+  primary_date       STRING,
+  _loaded_at         TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+  _source            STRING    DEFAULT 'flat-file'
+);
+
+LOAD DATA INTO autoelite_raw.deal_items (
+  Id                 STRING,
+  OpportunityId      STRING,
+  Product2Id         STRING,
+  PricebookEntryId   STRING,
+  Quantity           STRING,
+  TotalPrice         STRING
+)
+FROM FILES (
+  format            = 'CSV',
+  uris              = ['gs://qst-public/ba882/202609/autoelite/deal_items.csv'],
+  skip_leading_rows = 1
+);
+
 -- activities (Task table from CRM — rep interactions logged against deals)
 CREATE OR REPLACE TABLE autoelite_raw.activities (
   id            STRING,

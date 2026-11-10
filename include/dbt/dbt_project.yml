@@ -22,3 +22,6 @@ models:
     marts:
       +materialized: table
       +schema: autoelite_marts
+    ai_datasets:
+      +materialized: table
+      +schema: ai_datasets
