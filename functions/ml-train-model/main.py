@@ -23,7 +23,7 @@ from sklearn.model_selection import train_test_split
 GCS_BUCKET = os.environ.get("GCS_BUCKET", "")
 
 # columns that identify a row but are not model features
-ID_COLS = ["deal_id", "customer_id", "rep_id", "is_won"]
+ID_COLS = ["deal_id", "customer_id", "rep_id", "is_won", "stage_name"]
 
 
 @functions_framework.http
