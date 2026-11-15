@@ -198,8 +198,9 @@ def ml_deal_won():
         return "promote" if new_auc > current_auc else "skip_promote"
 
     @task
-    def promote(best: dict) -> str:
+    def promote(**context) -> str:
         """Write the winning run to mlops.model_version. Archive the previous production version."""
+        best             = context["task_instance"].xcom_pull(task_ids="find_best_run")
         bq               = bigquery.Client(project=GCP_PROJECT)
         model_version_id = f"mv-{MODEL['model_id']}-{uuid.uuid4().hex[:8]}"
         metrics          = json.dumps(best.get("metrics", {}))
@@ -250,7 +251,7 @@ def ml_deal_won():
     best   = find_best_run(train_results)
     branch = should_promote(best)
 
-    promoted = promote(best)
+    promoted = promote()
     skip     = skip_promote()
     branch >> [promoted, skip]
 
