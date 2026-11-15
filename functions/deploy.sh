@@ -80,4 +80,22 @@ gcloud functions deploy ml-train-model \
     --timeout 300s \
     --set-env-vars GCS_BUCKET=$GCS_BUCKET
 
+echo "======================================================"
+echo "deploying ml-predict-deals"
+echo "======================================================"
+
+gcloud functions deploy ml-predict-deals \
+    --gen2 \
+    --runtime python312 \
+    --trigger-http \
+    --entry-point task \
+    --source ./functions/ml-predict-deals \
+    --stage-bucket $STAGE_BUCKET \
+    --service-account $SA \
+    --region $REGION \
+    --allow-unauthenticated \
+    --memory 512MB \
+    --timeout 120s \
+    --set-env-vars GCP_PROJECT=$PROJECT
+
 echo "done"
