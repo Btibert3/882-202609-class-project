@@ -58,16 +58,11 @@ def ml_deploy():
         model_id     = rows[0].model_id
         artifact_path = rows[0].artifact_path
 
-        # archive prior active deployments for this model
+        # archive all prior active deployments
         bq.query(f"""
             UPDATE `{GCP_PROJECT}.mlops.deployment`
             SET traffic_split = 0.0
-            WHERE model_version_id IN (
-                SELECT model_version_id
-                FROM `{GCP_PROJECT}.mlops.model_version`
-                WHERE model_id = '{model_id}'
-            )
-            AND traffic_split > 0
+            WHERE traffic_split > 0
         """).result()
 
         deployment_id = f"dep-{model_version_id}-{uuid.uuid4().hex[:6]}"
