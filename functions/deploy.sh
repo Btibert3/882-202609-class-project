@@ -13,6 +13,7 @@ STAGE_BUCKET="${PROJECT}-functions"
 GCS_BUCKET="qst-btibert-882-202609-inclass-proj"    # we created this earlier in the semester
 
 AUTOELITE_API_KEY=YOUR_KEY_HERE
+ML_SERVE_URL="https://${REGION}-${PROJECT}.cloudfunctions.net/ml-predict-deals"
 
 
 gcloud config set project $PROJECT
@@ -77,5 +78,23 @@ gcloud functions deploy ml-train-model \
     --memory 1GB \
     --timeout 300s \
     --set-env-vars GCS_BUCKET=$GCS_BUCKET
+
+echo "======================================================"
+echo "deploying ml-predict-deals"
+echo "======================================================"
+
+gcloud functions deploy ml-predict-deals \
+    --gen2 \
+    --runtime python312 \
+    --trigger-http \
+    --entry-point task \
+    --source ./functions/ml-predict-deals \
+    --stage-bucket $STAGE_BUCKET \
+    --service-account $SA \
+    --region $REGION \
+    --allow-unauthenticated \
+    --memory 512MB \
+    --timeout 120s \
+    --set-env-vars GCP_PROJECT=$PROJECT
 
 echo "done"

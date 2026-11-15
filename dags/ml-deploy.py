@@ -4,8 +4,9 @@
 Triggered by ml_deal_won via TriggerDagRunOperator when a new model version is promoted.
 Writes the active deployment record to mlops.deployment and archives the previous one.
 
-The endpoint_url is the GCS artifact path of the promoted model — any serving function
-queries `mlops.deployment WHERE traffic_split > 0` to find the current model artifact.
+endpoint_url = the ml-predict-deals Cloud Function URL.
+The serving function queries mlops.deployment WHERE traffic_split > 0 to find which
+model version is active, then loads the artifact from mlops.model_version.artifact_path.
 
 Flow:
   1. register_deployment — look up the promoted model_version, archive prior deployment,
@@ -19,7 +20,8 @@ from datetime import datetime
 from airflow.sdk import dag, task
 from google.cloud import bigquery
 
-GCP_PROJECT = os.environ.get("GCP_PROJECT", "")
+GCP_PROJECT  = os.environ.get("GCP_PROJECT", "")
+ML_SERVE_URL = os.environ.get("ML_SERVE_URL", "")
 
 
 @dag(
@@ -76,13 +78,13 @@ def ml_deploy():
             VALUES (
                 '{deployment_id}',
                 '{model_version_id}',
-                '{artifact_path}',
+                '{ML_SERVE_URL}',
                 1.0,
                 CURRENT_TIMESTAMP()
             )
         """).result()
 
-        print(f"deployed: {deployment_id} | version={model_version_id} | artifact={artifact_path}")
+        print(f"deployed: {deployment_id} | version={model_version_id} | endpoint={ML_SERVE_URL}")
 
     register_deployment()
 
