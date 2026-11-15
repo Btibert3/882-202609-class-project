@@ -13,7 +13,6 @@ STAGE_BUCKET="${PROJECT}-functions"
 GCS_BUCKET="qst-btibert-882-202609-inclass-proj"    # we created this earlier in the semester
 
 AUTOELITE_API_KEY=YOUR_KEY_HERE
-ML_SERVE_URL="https://${REGION}-${PROJECT}.cloudfunctions.net/ml-predict-deals"
 
 
 gcloud config set project $PROJECT

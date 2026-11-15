@@ -20,8 +20,7 @@ from datetime import datetime
 from airflow.sdk import dag, task
 from google.cloud import bigquery
 
-GCP_PROJECT  = os.environ.get("GCP_PROJECT", "")
-ML_SERVE_URL = os.environ.get("ML_SERVE_URL", "")
+GCP_PROJECT = os.environ.get("GCP_PROJECT", "")
 
 
 @dag(
@@ -73,13 +72,13 @@ def ml_deploy():
             VALUES (
                 '{deployment_id}',
                 '{model_version_id}',
-                '{ML_SERVE_URL}',
+                '{artifact_path}',
                 1.0,
                 CURRENT_TIMESTAMP()
             )
         """).result()
 
-        print(f"deployed: {deployment_id} | version={model_version_id} | endpoint={ML_SERVE_URL}")
+        print(f"deployed: {deployment_id} | version={model_version_id} | artifact={artifact_path}")
 
     register_deployment()
 
