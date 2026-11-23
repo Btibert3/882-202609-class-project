@@ -427,6 +427,7 @@ FROM FILES (
 );
 
 -- call_transcripts (AI surface — rep/customer call text)
+-- end_time is only present in API records (post 9/1); not in the flat-file export
 CREATE OR REPLACE TABLE autoelite_raw.call_transcripts (
   id              STRING,
   opportunity_id  STRING,
@@ -443,8 +444,7 @@ LOAD DATA INTO autoelite_raw.call_transcripts (
   opportunity_id  STRING,
   lead_id         STRING,
   body            STRING,
-  created_date    STRING,
-  end_time        STRING
+  created_date    STRING
 )
 FROM FILES (
   format            = 'CSV',
