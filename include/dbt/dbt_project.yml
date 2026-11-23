@@ -13,6 +13,9 @@ clean-targets: ["target"]
 
 models:
   autoelite:
+    +persist_docs:
+      relation: true
+      columns: true
     staging:
       +materialized: view
       +schema: autoelite_staging
