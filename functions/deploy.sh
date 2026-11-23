@@ -96,22 +96,4 @@ gcloud functions deploy ml-predict-deals \
     --timeout 120s \
     --set-env-vars GCP_PROJECT=$PROJECT
 
-echo "======================================================"
-echo "deploying embed-transcripts"
-echo "======================================================"
-
-gcloud functions deploy embed-transcripts \
-    --gen2 \
-    --runtime python312 \
-    --trigger-http \
-    --entry-point task \
-    --source ./functions/embed-transcripts \
-    --stage-bucket $STAGE_BUCKET \
-    --service-account $SA \
-    --region $REGION \
-    --allow-unauthenticated \
-    --memory 512MB \
-    --timeout 300s \
-    --set-env-vars GCP_PROJECT=$PROJECT
-
 echo "done"

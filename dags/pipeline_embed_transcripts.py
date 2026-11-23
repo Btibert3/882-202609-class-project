@@ -2,19 +2,25 @@
 ## AutoElite: Embed Transcripts
 
 Triggered by pipeline_call_transcripts after each ingest run.
-Calls the embed-transcripts Cloud Function, which finds any transcripts
-not yet in stage.call_transcript_embeddings and generates embeddings for them.
+Uses BigQuery ML.GENERATE_EMBEDDING to embed any call transcripts not yet
+in stage.call_transcript_embeddings. BQ handles batching internally — no
+Cloud Function needed.
+
+Prerequisite: run setup/create_embedding_model.sql once to create the remote model.
 
 schedule=None     — only runs when triggered, never on its own schedule
 max_active_runs=1 — prevents concurrent runs stepping on each other during backfill
 """
 
 import os
-import requests
 from airflow.sdk import dag, task
+from google.cloud import bigquery
 
-EMBED_URL   = os.environ.get("EMBED_URL", "")
 GCP_PROJECT = os.environ.get("GCP_PROJECT", "")
+
+EMBED_TABLE  = f"`{GCP_PROJECT}.stage.call_transcript_embeddings`"
+SOURCE_TABLE = f"`{GCP_PROJECT}.autoelite_raw.call_transcripts`"
+EMBED_MODEL  = f"`{GCP_PROJECT}.stage.embed_model`"
 
 
 @dag(
@@ -26,16 +32,53 @@ GCP_PROJECT = os.environ.get("GCP_PROJECT", "")
 )
 def pipeline_embed_transcripts():
 
-    @task(retries=2)
-    def embed() -> dict:
-        """Call the Cloud Function to embed any new transcripts."""
-        resp = requests.post(EMBED_URL, json={}, timeout=300)
-        resp.raise_for_status()
-        result = resp.json()
-        print(f"embedded: {result.get('embedded', 0)}")
-        return result
+    @task
+    def create_embeddings_table() -> None:
+        """Ensure the destination table exists."""
+        bq = bigquery.Client(project=GCP_PROJECT)
+        bq.query(f"""
+            CREATE TABLE IF NOT EXISTS {EMBED_TABLE} (
+                transcript_id   STRING,
+                transcript_text STRING,
+                embedding       ARRAY<FLOAT64>
+            )
+        """).result()
+        print("embeddings table ready")
 
-    embed()
+    @task
+    def embed() -> int:
+        """
+        Insert embeddings for any transcripts not yet embedded.
+        ML.GENERATE_EMBEDDING calls Vertex AI via the remote model and
+        handles batching internally — no row limits to manage here.
+        """
+        bq = bigquery.Client(project=GCP_PROJECT)
+
+        job = bq.query(f"""
+            INSERT INTO {EMBED_TABLE} (transcript_id, transcript_text, embedding)
+            SELECT
+                id                             AS transcript_id,
+                body                           AS transcript_text,
+                ml_generate_embedding_result   AS embedding
+            FROM ML.GENERATE_EMBEDDING(
+                MODEL {EMBED_MODEL},
+                (
+                    SELECT id, body AS content
+                    FROM {SOURCE_TABLE}
+                    WHERE id NOT IN (
+                        SELECT transcript_id FROM {EMBED_TABLE}
+                    )
+                )
+            )
+            WHERE ml_generate_embedding_status = ''
+        """)
+
+        job.result()
+        rows_inserted = job.num_dml_affected_rows or 0
+        print(f"embedded {rows_inserted} new transcripts")
+        return rows_inserted
+
+    create_embeddings_table() >> embed()
 
 
 pipeline_embed_transcripts()
