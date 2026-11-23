@@ -444,10 +444,12 @@ LOAD DATA INTO autoelite_raw.call_transcripts (
   opportunity_id  STRING,
   lead_id         STRING,
   body            STRING,
-  created_date    STRING
+  created_date    STRING,
+  end_time        STRING
 )
 FROM FILES (
   format            = 'CSV',
   uris              = ['gs://qst-public/ba882/202609/autoelite/call_transcripts.csv'],
-  skip_leading_rows = 1
+  skip_leading_rows = 1,
+  quote             = '"'
 );
