@@ -7,16 +7,16 @@
 }}
 
 select
-    id                             as transcript_id,
-    body                           as transcript_text,
+    transcript_id,
+    transcript_text,
     ml_generate_embedding_result   as embedding
 from ML.GENERATE_EMBEDDING(
     MODEL `{{ env_var('GCP_PROJECT', 'PROJECT_NOT_SET') }}.stage.embed_model`,
     (
-        select id, body as content
-        from `{{ env_var('GCP_PROJECT', 'PROJECT_NOT_SET') }}.autoelite_raw.call_transcripts`
+        select transcript_id as id, transcript_text as content
+        from {{ ref('stg_call_transcripts') }}
         {% if is_incremental() %}
-        where id not in (select transcript_id from {{ this }})
+        where transcript_id not in (select transcript_id from {{ this }})
         {% endif %}
     )
 )
