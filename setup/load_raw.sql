@@ -425,3 +425,29 @@ FROM FILES (
   uris              = ['gs://qst-public/ba882/202609/autoelite/activities.csv'],
   skip_leading_rows = 1
 );
+
+-- call_transcripts (AI surface — rep/customer call text)
+CREATE OR REPLACE TABLE autoelite_raw.call_transcripts (
+  id              STRING,
+  opportunity_id  STRING,
+  lead_id         STRING,
+  body            STRING,
+  created_date    STRING,
+  end_time        STRING,
+  _loaded_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+  _source         STRING    DEFAULT 'flat-file'
+);
+
+LOAD DATA INTO autoelite_raw.call_transcripts (
+  id              STRING,
+  opportunity_id  STRING,
+  lead_id         STRING,
+  body            STRING,
+  created_date    STRING,
+  end_time        STRING
+)
+FROM FILES (
+  format            = 'CSV',
+  uris              = ['gs://qst-public/ba882/202609/autoelite/call_transcripts.csv'],
+  skip_leading_rows = 1
+);

@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: stg_call_transcripts
+    description: "One row per rep-to-customer phone call. Cleaned and renamed from the raw CRM export. transcript_text is the primary surface for embeddings and LLM analysis."
+    meta:
+      owner: analytics-eng
+      domain: ai
+    columns:
+      - name: transcript_id
+        description: "Unique identifier for the call transcript."
+        tests:
+          - unique
+          - not_null
+      - name: deal_id
+        description: "The deal (opportunity) this call was logged against. Foreign key to stg_deals."
+      - name: lead_id
+        description: "Pre-conversion lead associated with the call, if applicable. Null once the lead converts to a customer."
+      - name: transcript_text
+        description: "Full text of the rep-to-customer call. This is the column we embed and search semantically."
+      - name: created_date
+        description: "Timestamp when the call record was created in the CRM."
+      - name: end_time
+        description: "Timestamp when the call ended."

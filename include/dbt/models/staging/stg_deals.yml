@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: stg_deals
+    description: "One row per sales opportunity. Cleaned and renamed from the AutoElite CRM. A deal moves through five stages before closing."
+    meta:
+      owner: analytics-eng
+      domain: sales
+    columns:
+      - name: deal_id
+        description: "Unique deal identifier."
+        tests:
+          - unique
+          - not_null
+      - name: contract_id
+        description: "Non-null when the deal converted to a signed contract. This is the binary classification label used in the ML model: non-null = won, null = lost."
+      - name: customer_id
+        description: "The customer account this deal belongs to. Foreign key to stg_customers."
+      - name: rep_id
+        description: "The sales rep who owns this deal. Foreign key to stg_reps."
+      - name: stage_name
+        description: "Current pipeline stage: Qualification, Discovery, Quote, Negotiation, or Closed."
+      - name: amount
+        description: "Estimated deal value in USD."
+      - name: probability
+        description: "Rep-estimated probability of closing, as a percentage."
+      - name: created_date
+        description: "Timestamp when the deal was created in the CRM."
+      - name: close_date
+        description: "Target or actual close date for the deal."

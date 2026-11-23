@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: stg_activities
+    description: "One row per rep activity logged in the CRM — calls, emails, and tasks recorded against a deal. Key feature input for the deal won/lost ML model."
+    meta:
+      owner: analytics-eng
+      domain: sales
+    columns:
+      - name: activity_id
+        description: "Unique activity identifier."
+        tests:
+          - unique
+          - not_null
+      - name: deal_id
+        description: "The deal this activity was logged against. Renamed from WhatId — a Salesforce polymorphic FK that points to deals in this dataset."
+      - name: rep_id
+        description: "The rep who performed the activity. Foreign key to stg_reps."
+      - name: priority
+        description: "Activity priority: High, Normal, or Low."
+      - name: status
+        description: "Completion status of the activity: Not Started, In Progress, or Completed."
+      - name: activity_date
+        description: "Date the activity was scheduled or completed."
+      - name: subject
+        description: "Short label describing the activity (e.g. Call, Email, Follow-up)."
+      - name: description
+        description: "Free-text notes the rep added to the activity."

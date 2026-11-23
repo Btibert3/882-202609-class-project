@@ -2,16 +2,29 @@ version: 2
 
 sources:
   - name: autoelite_raw
+    description: "Raw tables landed from the AutoElite CRM API and flat-file backfill. One row per API record; deduplication happens in the staging layer."
     database: "{{ env_var('GCP_PROJECT') }}"
     schema: autoelite_raw
     tables:
       - name: customers
+        description: "AutoElite customer accounts."
       - name: deals
+        description: "Sales opportunities in the CRM pipeline. Each deal moves through stages: Qualification, Discovery, Quote, Negotiation, Closed."
       - name: deal_items
+        description: "Line items on a deal — the specific vehicles or products a customer is considering."
       - name: orders
+        description: "Fulfilled purchase orders. A deal converts to an order when a contract is signed."
       - name: order_items
+        description: "Line items on a fulfilled order."
       - name: quotes
+        description: "Formal price quotes issued to customers during the negotiation stage."
       - name: quote_items
+        description: "Line items on a quote."
       - name: prospects
+        description: "Pre-conversion leads who have not yet become customers."
       - name: tickets
+        description: "Customer support and service cases."
       - name: activities
+        description: "Rep activity log — calls, emails, and tasks recorded against a deal."
+      - name: call_transcripts
+        description: "Full text of rep-to-customer phone calls. Primary surface for embeddings, semantic search, and LLM-based analysis."

@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: fct_order_items
+    description: "Fact table: one row per order line item. The primary reporting table for revenue analysis. Joins enriched line items with dimension keys — customers, reps, and products are all denormalized here."
+    meta:
+      owner: analytics-eng
+      domain: revenue
+    columns:
+      - name: order_item_id
+        description: "Unique identifier for the order line item."
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        description: "The order this line item belongs to."
+      - name: order_date
+        description: "Date the order was placed."
+      - name: order_status
+        description: "Fulfillment status of the order."
+      - name: customer_id
+        description: "The customer who placed the order."
+      - name: rep_id
+        description: "The rep who handled the sale."
+      - name: product_id
+        description: "The product sold on this line."
+      - name: product_name
+        description: "Human-readable product name, denormalized from dim_products."
+      - name: quantity
+        description: "Number of units sold."
+      - name: unit_price
+        description: "Price per unit at time of sale."
+      - name: line_total
+        description: "Total revenue for this line item: quantity × unit_price."
