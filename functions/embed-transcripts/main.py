@@ -36,23 +36,24 @@ def task(request):
     """).result()
 
     # find transcripts not yet embedded
-    rows = bq.query(f"""
+    result = bq.query(f"""
         SELECT id AS transcript_id, body AS transcript_text
         FROM `{SOURCE_TABLE}`
         WHERE id NOT IN (
             SELECT transcript_id FROM `{EMBED_TABLE}`
         )
         ORDER BY id
-    """).to_dataframe()
+    """).result()
 
-    if rows.empty:
+    rows = [(row.transcript_id, row.transcript_text) for row in result]
+
+    if not rows:
         print("no new transcripts to embed")
         return {"embedded": 0}, 200
 
     print(f"embedding {len(rows)} transcripts")
 
-    texts   = rows["transcript_text"].tolist()
-    ids     = rows["transcript_id"].tolist()
+    ids, texts = zip(*rows)
 
     response = client.models.embed_content(
         model=EMBED_MODEL,
