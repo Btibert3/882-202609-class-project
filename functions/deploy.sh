@@ -10,7 +10,9 @@ REGION="us-central1"
 # you can get your service account from IAM on your project
 SA="in-class-project@btibert-ba882-fall26.iam.gserviceaccount.com"
 STAGE_BUCKET="${PROJECT}-functions"
-GCS_BUCKET="qst-btibert-882-202609-inclass-proj"    # we created this earlier in the semester
+GCS_BUCKET="qst-btibert-882-202609-inclass-proj" 
+
+AUTOELITE_API_KEY=6e680c2fb51808cbbbff5013174aa6ab  # we created this earlier in the semester
 
 AUTOELITE_API_KEY=YOUR_KEY_HERE
 
