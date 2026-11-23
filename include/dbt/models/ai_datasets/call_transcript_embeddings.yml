@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: call_transcript_embeddings
+    description: >
+      Vector embeddings for all call transcripts, generated via BigQuery ML.GENERATE_EMBEDDING
+      against the Vertex AI text-embedding-005 model. Incrementally updated — only transcripts
+      not yet embedded are processed on each run. Used as the retrieval corpus for
+      semantic search and NL-over-data queries in the LLMOps pipeline.
+    columns:
+      - name: transcript_id
+        description: Unique identifier for the call transcript. Foreign key to stg_call_transcripts.
+      - name: transcript_text
+        description: The raw body text of the call transcript that was embedded.
+      - name: embedding
+        description: >
+          768-dimension vector produced by text-embedding-005. Stored as ARRAY<FLOAT64>.
+          Used with VECTOR_SEARCH to find semantically similar transcripts.

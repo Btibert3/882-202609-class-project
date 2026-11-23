@@ -2,9 +2,8 @@
 ## AutoElite: Embed Transcripts
 
 Triggered by pipeline_call_transcripts after each ingest run.
-Uses BigQuery ML.GENERATE_EMBEDDING to embed any call transcripts not yet
-in stage.call_transcript_embeddings. BQ handles batching internally — no
-Cloud Function needed.
+Runs the dbt incremental model `call_transcript_embeddings`, which calls
+ML.GENERATE_EMBEDDING to embed any transcripts not yet in ai_datasets.
 
 Prerequisite: run setup/create_embedding_model.sql once to create the remote model.
 
@@ -13,14 +12,13 @@ max_active_runs=1 — prevents concurrent runs stepping on each other during bac
 """
 
 import os
+import subprocess
+from pathlib import Path
+
 from airflow.sdk import dag, task
-from google.cloud import bigquery
 
-GCP_PROJECT = os.environ.get("GCP_PROJECT", "")
-
-EMBED_TABLE  = f"`{GCP_PROJECT}.stage.call_transcript_embeddings`"
-SOURCE_TABLE = f"`{GCP_PROJECT}.autoelite_raw.call_transcripts`"
-EMBED_MODEL  = f"`{GCP_PROJECT}.stage.embed_model`"
+DBT_PROJECT_PATH = (Path(__file__).parent / "../include/dbt").absolute()
+DBT_EXECUTABLE   = os.getenv("DBT_EXECUTABLE_PATH", "/usr/local/airflow/dbt_venv/bin/dbt")
 
 
 @dag(
@@ -28,57 +26,29 @@ EMBED_MODEL  = f"`{GCP_PROJECT}.stage.embed_model`"
     catchup=False,
     max_active_runs=1,
     default_args={"retries": 2},
-    tags=["embeddings", "call_transcripts"],
+    tags=["embeddings", "call_transcripts", "dbt"],
 )
 def pipeline_embed_transcripts():
 
     @task
-    def create_embeddings_table() -> None:
-        """Ensure the destination table exists."""
-        bq = bigquery.Client(project=GCP_PROJECT)
-        bq.query(f"""
-            CREATE TABLE IF NOT EXISTS {EMBED_TABLE} (
-                transcript_id   STRING,
-                transcript_text STRING,
-                embedding       ARRAY<FLOAT64>
-            )
-        """).result()
-        print("embeddings table ready")
+    def embed() -> None:
+        """Run the dbt incremental model to embed any new transcripts."""
+        result = subprocess.run(
+            [
+                DBT_EXECUTABLE, "run",
+                "--select", "call_transcript_embeddings",
+                "--profiles-dir", str(DBT_PROJECT_PATH),
+                "--project-dir", str(DBT_PROJECT_PATH),
+            ],
+            capture_output=True,
+            text=True,
+        )
+        print(result.stdout)
+        if result.returncode != 0:
+            print(result.stderr)
+            raise RuntimeError("dbt run failed — see logs above")
 
-    @task
-    def embed() -> int:
-        """
-        Insert embeddings for any transcripts not yet embedded.
-        ML.GENERATE_EMBEDDING calls Vertex AI via the remote model and
-        handles batching internally — no row limits to manage here.
-        """
-        bq = bigquery.Client(project=GCP_PROJECT)
-
-        job = bq.query(f"""
-            INSERT INTO {EMBED_TABLE} (transcript_id, transcript_text, embedding)
-            SELECT
-                id                             AS transcript_id,
-                content                        AS transcript_text,
-                ml_generate_embedding_result   AS embedding
-            FROM ML.GENERATE_EMBEDDING(
-                MODEL {EMBED_MODEL},
-                (
-                    SELECT id, body AS content
-                    FROM `{GCP_PROJECT}.autoelite_raw.call_transcripts`
-                    WHERE id NOT IN (
-                        SELECT transcript_id FROM {EMBED_TABLE}
-                    )
-                )
-            )
-            WHERE ml_generate_embedding_status = ''
-        """)
-
-        job.result()
-        rows_inserted = job.num_dml_affected_rows or 0
-        print(f"embedded {rows_inserted} new transcripts")
-        return rows_inserted
-
-    create_embeddings_table() >> embed()
+    embed()
 
 
 pipeline_embed_transcripts()
