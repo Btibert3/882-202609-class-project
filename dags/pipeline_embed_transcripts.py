@@ -58,13 +58,13 @@ def pipeline_embed_transcripts():
             INSERT INTO {EMBED_TABLE} (transcript_id, transcript_text, embedding)
             SELECT
                 id                             AS transcript_id,
-                body                           AS transcript_text,
+                content                        AS transcript_text,
                 ml_generate_embedding_result   AS embedding
             FROM ML.GENERATE_EMBEDDING(
                 MODEL {EMBED_MODEL},
                 (
                     SELECT id, body AS content
-                    FROM {SOURCE_TABLE}
+                    FROM `{GCP_PROJECT}.autoelite_raw.call_transcripts`
                     WHERE id NOT IN (
                         SELECT transcript_id FROM {EMBED_TABLE}
                     )
