@@ -448,8 +448,9 @@ LOAD DATA INTO autoelite_raw.call_transcripts (
   end_time        STRING
 )
 FROM FILES (
-  format            = 'CSV',
-  uris              = ['gs://qst-public/ba882/202609/autoelite/call_transcripts.csv'],
-  skip_leading_rows = 1,
-  quote             = '"'
+  format                = 'CSV',
+  uris                  = ['gs://qst-public/ba882/202609/autoelite/call_transcripts.csv'],
+  skip_leading_rows     = 1,
+  quote                 = '"',
+  allow_quoted_newlines = true
 );
