@@ -7,9 +7,9 @@
 }}
 
 select
-    transcript_id,
-    transcript_text,
-    ml_generate_embedding_result   as embedding
+    id                           as transcript_id,
+    content                      as transcript_text,
+    ml_generate_embedding_result as embedding
 from ML.GENERATE_EMBEDDING(
     MODEL `{{ env_var('GCP_PROJECT', 'PROJECT_NOT_SET') }}.stage.embed_model`,
     (
